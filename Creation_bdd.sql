@@ -160,3 +160,97 @@ INSERT INTO SERIE (Id_SEANCE, Id_Exercice, ordre_serie, repetitions, charge_kg, 
 SHOW TABLES;
 DESC SPORTIF;
 SELECT * FROM SPORTIF;
+
+
+Regrouper les lignes pour faire des statistiques. Ici, on compte combien il y a de sportifs pour chaque niveau.
+SELECT niveau, COUNT(*) 
+FROM SPORTIF 
+GROUP BY niveau;
+
+Trier les résultats. Ici, on affiche les coachs triés du plus expérimenté au moins expérimenté.
+SELECT * FROM SEANCE 
+ORDER BY date_seance;
+
+Lier deux tables entre elles. Ici, on affiche le nom du sportif et le nom du programme quil suit
+SELECT p.nom_programme, c.nom_coach 
+FROM PROGRAMME p
+JOIN COACH c ON p.Id_Coach = c.Id_Coach;
+
+Modifier une donnée existante. Ici, on change le niveau du sportif numéro 1 pour le passer en "expert".
+UPDATE SPORTIF 
+SET niveau = 'avance'
+WHERE Id_Sportif = 1;
+
+Supprimer une ligne.
+DELETE FROM OBJECTIF 
+WHERE Id_Objectif = 1;
+
+Filtrer après un regroupement (après un GROUP BY). Ici, on affiche les spécialités où il y a plus de 2 coachs.
+SELECT specialite, COUNT(*) 
+FROM COACH 
+GROUP BY specialite 
+HAVING COUNT(*) > 2;
+
+Mettre bout à bout les résultats de deux requêtes. Ici, on fait une liste unique de tous les noms (Coachs + Sportifs).
+SELECT nom FROM SPORTIF
+UNION
+SELECT nom_coach FROM COACH;
+
+Modifier la structure dune table (ajouter/supprimer une colonne). Ici, on ajoute une colonne "telephone" à la table SPORTIF.
+ALTER TABLE SPORTIF 
+ADD telephone VARCHAR(20);
+
+Supprimer définitivement une table.
+CREATE TABLE table_a_supprimer (id INT); 
+DROP TABLE table_a_supprimer;
+
+Limiter le nombre de résultats affichés
+SELECT * FROM EXERCICE 
+LIMIT 2;
+
+Supprimer les doublons dans laffichage
+SELECT DISTINCT type_effort 
+FROM EXERCICE;
+
+Rechercher un morceau de texte.
+SELECT * FROM PROGRAMME 
+WHERE nom_programme LIKE '%Crossfit%';
+
+Vérifier si une valeur est dans une liste précise
+SELECT * FROM SEANCE 
+WHERE type_seance IN ('muscu', 'cardio');
+
+Vérifier si une valeur est comprise entre deux valeurs
+SELECT * FROM SPORTIF 
+WHERE date_naissance BETWEEN '1990-01-01' AND '2000-12-31';
+
+Faire une condition "SI... ALORS" à laffichage. Ici, on affiche "Intensif" si la durée du programme dépasse 8 semaines, sinon "Court".
+SELECT duree_minutes,
+CASE
+  WHEN duree_minutes < 45 THEN 'Courte'
+  ELSE 'Longue'
+END AS categorie
+FROM SEANCE;
+
+Vider tout le contenu dune table (sans supprimer la table elle-même)
+CREATE TABLE table_a_vider (id INT);
+INSERT INTO table_a_vider VALUES (1);
+TRUNCATE TABLE table_a_vider; 
+
+Voir comment SQL va exécuter la requête
+EXPLAIN SELECT * FROM SPORTIF;
+
+Créer une "vue" (une requête sauvegardée quon utilise comme une table). Ici, on crée une vue qui ne contient que les coachs de Musculation.
+CREATE VIEW Vue_Coachs_Muscu AS
+SELECT nom_coach, mail_coach 
+FROM COACH 
+WHERE specialite = 'muscu';
+
+Modifier une vue existante (ou la créer si elle nexiste pas)
+CREATE OR REPLACE VIEW Vue_Coachs_Muscu AS
+SELECT nom_coach, mail_coach, experience 
+FROM COACH 
+WHERE specialite = 'muscu';
+
+Supprimer une vue.
+DROP VIEW Vue_Coachs_Muscu;
