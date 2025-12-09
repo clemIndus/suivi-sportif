@@ -1,0 +1,16 @@
+1FN
+
+Tous les attributs de toutes les tables sont atomiques (une seule valeur par case) et il n’existe aucun groupe répétitif.
+Exemple : les répétitions d’exercices ne sont pas stockées plusieurs fois dans SEANCE, elles sont mises dans la table SERIE.
+
+2FN
+
+Toutes les tables sont automatiquement en 2FN sauf celles qui ont une clé composée.
+Ici, seule la table SERIE a une clé composée et tous ses attributs dépendent bien de la clé complète.
+Donc aucune dépendance partielle → 2FN validée.
+
+3FN
+
+Aucune table ne contient un attribut non-clé qui dépend d’un autre attribut non-clé.
+Les données du SPORTIF, COACH, PROGRAMME... ne sont pas dupliquées dans d'autres tables, elles sont bien séparées.
+Donc pas de dépendance transitive, → 3FN validée.
